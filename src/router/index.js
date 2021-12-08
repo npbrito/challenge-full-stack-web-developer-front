@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Home from '../views/Home.vue'
+import Users from '../views/Users.vue'
 import Router from 'vue-router';
 
 Vue.use(Router);
@@ -14,7 +15,7 @@ const router = new Router({
         {
             path: "/users",
             name: "users",
-            component: Home
+            component: Users
         }
     ],
     mode: 'history'
