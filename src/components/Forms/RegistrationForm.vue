@@ -4,7 +4,7 @@
       hide-footer
       id="modal-form"
       ref="modal-form"
-      title="Cadastrar usuário"
+      :title="title"
       v-model="isOpen"
     >
       <b-container>
@@ -54,7 +54,10 @@
           >
             Campo não pode ser vazio.
           </div>
-          <div class="error" v-if="!$v.user.email.email && $v.user.email.$dirty">
+          <div
+            class="error"
+            v-if="!$v.user.email.email && $v.user.email.$dirty"
+          >
             Insira um e-mail válido.
           </div>
         </b-form-group>
@@ -91,13 +94,14 @@ export default {
     registrationType: {
       required: true,
     },
+    userInfo: {
+      id: "",
+      name: "",
+      email: "",
+    },
   },
   data() {
     return {
-      user: {
-        name: "",
-        email: "",
-      },
       alertOptions: {
         message: "",
         status: "",
@@ -160,6 +164,16 @@ export default {
       },
       set(newValue) {
         this.$emit("input", newValue);
+      },
+    },
+    user: {
+      get() {
+        return this.userInfo;
+      },
+    },
+    title: {
+      get() {
+        return this.registrationType == "new" ? "Novo usuário" : "Editar usuário";
       },
     },
   },

@@ -13,7 +13,7 @@ export default {
     async getUser(id){
         return axios.get(apiUrl, id)
         .then((res) => res.data)
-        .catch((err)=> console.error(err))
+        .catch((err)=> (err))
     },
 
     async postUser(user){
@@ -22,16 +22,18 @@ export default {
         .catch((err)=> (err))
     },
 
-    async putUser(id){
-        return axios.put(apiUrl, id)
+    async putUser(user){
+        return axios.put(apiUrl, user.id, {
+            data: {user}
+        })
         .then((res) => res)
         .catch((err)=> (err))
     },
 
-    async disableUser(id){
+    async deleteUser(id){
         return axios.delete(apiUrl, id)
         .then((res) => res)
-        .catch((err)=> console.error(err))
+        .catch((err)=> (err))
     },
 
 }
