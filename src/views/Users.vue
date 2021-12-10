@@ -86,10 +86,10 @@ export default {
   },
 
   methods: {
-    init() {
-      userApi.getAll().then((users) => console.log(users));
-    },
     save() {},
+    init() {
+      userApi.getAll().then((fetchedUsers) => this.users = fetchedUsers.filter((user) => user.isActive === true));
+    },
     openRegistrationForm(type, item) {
       this.registrationType = type;
       if (type == "edit") {
@@ -100,7 +100,7 @@ export default {
     confirmDelete(item) {
       this.displayConfirmDelete = true;
       this.selectedUserId = item.id;
-    },
+    }
   },
 };
 </script>

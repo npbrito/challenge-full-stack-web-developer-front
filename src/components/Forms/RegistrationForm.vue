@@ -60,6 +60,9 @@
           >
             Insira um e-mail válido.
           </div>
+          <div class="error" v-if="emailExists">
+            O email inserido já está cadastrado.
+          </div>
         </b-form-group>
       </b-container>
       <b-row align-h="center">
@@ -107,6 +110,7 @@ export default {
         status: "",
       },
       showAlert: false,
+      emailExists: false,
     };
   },
   validations: {
@@ -123,8 +127,8 @@ export default {
   },
   methods: {
     save(event) {
+      event.preventDefault();
       if (this.registrationType == "new") {
-        event.preventDefault();
         this.closeModal();
         userApi.postUser(this.user).then((res) => {
           if (res.status == 200) {
@@ -132,17 +136,26 @@ export default {
           } else {
             this.alert("Houve um erro ao salvar o usuário", "danger");
           }
-          this.closeModal();
         });
+        this.closeModal();
       } else if (this.registrationType == "edit") {
-        userApi.putUser(this.user).then((res) => {
-          if (res.status == 200) {
-            this.alert("Usuário salvo com sucesso", "success");
-          } else {
-            this.alert("Houve um erro ao salvar o usuário", "danger");
-          }
-          this.closeModal();
+        // Verify email first
+        userApi.verifyEmail(this.user.emmail).then((res) => {
+          // Res will be true if email exists
+          this.emailExists = res;
         });
+
+        if (!this.emailExists) {
+          // Then can send
+          userApi.putUser(this.user).then((res) => {
+            if (res.status == 200) {
+              this.alert("Usuário salvo com sucesso", "success");
+            } else {
+              this.alert("Houve um erro ao salvar o usuário", "danger");
+            }
+          });
+          this.closeModal();
+        }
       }
     },
     closeModal() {
@@ -173,7 +186,9 @@ export default {
     },
     title: {
       get() {
-        return this.registrationType == "new" ? "Novo usuário" : "Editar usuário";
+        return this.registrationType == "new"
+          ? "Novo usuário"
+          : "Editar usuário";
       },
     },
   },

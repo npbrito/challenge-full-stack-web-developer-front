@@ -36,4 +36,10 @@ export default {
         .catch((err)=> (err))
     },
 
+    async verifyEmail(email){
+        return axios.delete(`${apiUrl}validate`, email)
+        .then((res) => res)
+        .catch((err)=> (err))
+    }
+
 }
